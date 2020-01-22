@@ -33,6 +33,11 @@ class Comments
      */
     private $product;
 
+        /**
+     * @ORM\Column(type="date")
+     */
+    private $Dcomment;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +75,19 @@ class Comments
     public function setProduct(?Products $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+
+    public function getDcomment(): ?\DateTimeInterface
+    {
+        return $this->Dcomment;
+    }
+
+    public function setDcomment(\DateTimeInterface $Dcomment): self
+    {
+        $this->Dcomment = $Dcomment;
 
         return $this;
     }

@@ -1,7 +1,6 @@
 import React from "react";
-import { Redirect } from 'react-router'
 import API from "../../utils/API";
-import { Link } from 'react-router-dom'
+
 
 
 export default class Login extends React.Component {
@@ -27,16 +26,19 @@ export default class Login extends React.Component {
     submituserLoginForm = async (event) => {
         event.preventDefault();
         if (this.validateForm()) {
+            
             let fields = {};
             fields["Email"] = "";
             fields["Password"] = "";
             this.setState({ fields: fields });
             // console.log(this.state.fields.Email)
             API.login(this.state.fields).then(res => {
-                localStorage.setItem("usertoken", res);
+                localStorage.setItem('usertoken',JSON.stringify(res.data))
                 this.props.history.push('/')
                 // console.log(res.data[0]);
-            }).catch(err => console.log('erreur reat', err))
+            }).catch(err => alert('veuillez vous inscrire pour vous connecter', err ),
+            
+            )
         }
     }
 

@@ -53,6 +53,11 @@ class Users
      */
     private $State;
 
+        /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $picture;
+
     /**
      * @ORM\Column(type="integer")
      */
@@ -88,11 +93,17 @@ class Users
      */
     private $phone;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Adress", mappedBy="user", orphanRemoval=true)
+     */
+    private $adresses;
+
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->creditcard = new ArrayCollection();
+        $this->adresses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -320,6 +331,37 @@ class Users
     public function setPicture(?string $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Adress[]
+     */
+    public function getAdresses(): Collection
+    {
+        return $this->adresses;
+    }
+
+    public function addAdress(Adress $adress): self
+    {
+        if (!$this->adresses->contains($adress)) {
+            $this->adresses[] = $adress;
+            $adress->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdress(Adress $adress): self
+    {
+        if ($this->adresses->contains($adress)) {
+            $this->adresses->removeElement($adress);
+            // set the owning side to null (unless already changed)
+            if ($adress->getUser() === $this) {
+                $adress->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -1,0 +1,33 @@
+/* css slidewine */
+
+
+figure{
+  background-color: white;
+  margin: 0 !important;
+  display: block; 
+}
+
+figure img {
+  position: relative; 
+  margin-left:25% !important;
+  
+}
+
+ 
+ .desc {
+  position: absolute;
+  bottom: 10px;
+background-color: rgba(0, 0, 0, 0.5);
+color:white;
+  margin: 1%;
+  padding: 2%;
+  
+}
+
+#desc{
+	display: none;
+}
+
+figure:hover #desc {
+	display: block; 
+}

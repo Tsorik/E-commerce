@@ -15,10 +15,8 @@ class ProductController extends AbstractController
     public function index($id)
     {
         $repository = $this->getDoctrine()->getRepository(Products::class);
-        $products = $repository->findBy(['id' => $id]);
+        $product = $repository->find($id);
     
-         $ProductArray = array();
-         foreach ($products as $product) {
              $ProductArray[] = array(
                                         'id' => $product->getId(),
                                         'title' => $product->getTitle(),
@@ -27,8 +25,7 @@ class ProductController extends AbstractController
                                         'picture' => $product->getPicture(),
                                         'note' => $product->getScore(),
                                         'price' => $product->getPrice(),
-                                     );
-         }        
+                                     ); 
         return new JsonResponse($ProductArray);
     }
 }

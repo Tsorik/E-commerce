@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './Register.css';
 import API from "../../utils/API";
 
+
 class Register extends Component {
 
   constructor() {
@@ -30,7 +31,7 @@ class Register extends Component {
       let fields = {};
       fields["First_name"] = "";
       fields["Last_name"] = "";
-      fields["Picture"] = "";
+      fields["Picture"] = "https://st2.depositphotos.com/1104517/11967/v/950/depositphotos_119675554-stock-illustration-male-avatar-profile-picture-vector.jpg";
       fields["Phone"] = "";
       fields["Email"] = "";
       fields["Anniversary"] = "";
@@ -42,7 +43,7 @@ class Register extends Component {
       this.setState({ fields: fields });
       API.signup(this.state.fields).then(res => {
         alert("Bonjour ! vous êtes maintenant inscrit !");
-        window.location = "/login"
+        this.props.history.push('/login')
       }).catch(err => console.log('erreur reat', err))
     }
   }
@@ -52,6 +53,10 @@ class Register extends Component {
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
+    
+    if (!fields["Picture"]) {
+      fields["Picture"] = "https://st2.depositphotos.com/1104517/11967/v/950/depositphotos_119675554-stock-illustration-male-avatar-profile-picture-vector.jpg"
+    }
 
     if (!fields["First_name"]) {
       formIsValid = false;
@@ -96,16 +101,20 @@ class Register extends Component {
       }
     }
 
-    if (!fields["Password"]) {
-      formIsValid = false;
-      errors["Password"] = "*Merci de renseigner un mot de passe.";
+    if(!fields["Password"]){
+      fields["Password"] = "";
+      fields["Password2"] ="";
     }
-
-    if (typeof fields["Password"] !== "undefined") {
+    
+    if (fields["Password"] !== fields["Password2"]) {
+      
       if (!fields["Password"].match(/^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$!%&]).*$/)) {
         formIsValid = false;
         errors["Password"] = "*Votre mot de passe doit contenir une lettre en majuscule et un caractère spéciaux, minimum 8 caractères.";
       }
+
+      formIsValid = false;
+      errors["Password2"] = "Les mots de passe ne sont pas identiques"
     }
 
     this.setState({
@@ -119,6 +128,8 @@ class Register extends Component {
 
 
   render() {
+ 
+    
     return (
       <div id="main-registration-container">
         <div id="register">
@@ -143,6 +154,8 @@ class Register extends Component {
             <label>Mot de passe</label>
             <input type="password" name="Password" value={this.state.fields.Password} onChange={this.handleChange} />
             <div className="errorMsg">{this.state.errors.Password}</div>
+            <input type="password" placeholder="Confirmation du mot de passe" name="Password2" value={this.state.fields.Password2} onChange={this.handleChange} />
+            <div className="errorMsg">{this.state.errors.Password2}</div>
 
             <label>Mobile :</label>
             <input type="tel" name="Phone" value={this.state.fields.Phone} onChange={this.handleChange} />
