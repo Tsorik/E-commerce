@@ -8,7 +8,7 @@ class Footer extends Component {
     render() {
         return (
 
-            <div>
+            <footer style={{ bottom: "0" }}>
                 <div className="row" style={{ marginTop: "5%", color: "white", backgroundColor: "black" }}>
                     <div className="col-md-3" style={{ borderRight: "white solid 2px", margin: "auto", paddingLeft: "30px", paddingBottom: "20px" }}>
                         <p style={{ textAlign: "center", fontSize: `30px`, color: "grey" }}><i className="fas fa-envelope-open-text" ></i></p>
@@ -43,7 +43,7 @@ class Footer extends Component {
                     </div>
 
                 </div>
-            </div>
+            </footer>
         )
     }
 }

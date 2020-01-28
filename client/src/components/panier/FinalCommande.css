@@ -1,5 +1,3 @@
-
-
 .delivery{
     padding-left: 47px;
     padding-right: 10px;
@@ -26,6 +24,27 @@
 .add{
     margin-left: 30px;
 }
+
 .selection{
     padding-left: 30px;
+}
+
+.validation{
+    color: #A6261B !important;
+    border-color: #73150D !important;
+}
+
+.validation:hover{
+    background-color: #73150D !important;
+    color: white !important;
+}
+
+.final-step-order{
+    color: #A6261B !important;
+    border-color: #73150D !important;
+}
+
+.final-step-order:hover{
+    background-color: #73150D !important;
+    color: white !important;
 }

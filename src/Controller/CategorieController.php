@@ -24,6 +24,7 @@ class CategorieController extends AbstractController
                                         'categorie_id' => $categorie->getCategorie(),
                                         'title' => $categorie->getTitle(),
                                         'description' => $categorie->getDescription(),
+                                        'region' =>$categorie->getRegion(),
                                         'picture' => $categorie->getPicture(),
                                         'note' => $categorie->getScore(),
                                         'price' => $categorie->getPrice(),

@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react'
 import NavWine from '../home/NavWine'
 import './profile.css'
-import API from "../../utils/API";
+import API from "../../utils/API"
+import Button from '@material-ui/core/Button'
+
 
 
 
@@ -170,9 +172,7 @@ export default class ModifProfile extends Component {
                             <Fragment>
                 <div className="container">
                     <div className="row">
-                        <div className="bienvenue">
-                            <h3>Bienvenue {user.prenom}</h3>    
-                        </div>
+                            <h3 className="titre">Bienvenue {user.prenom}</h3>
                     </div>
                 </div>
 
@@ -465,8 +465,7 @@ export default class ModifProfile extends Component {
                                     <option value="Zimbabwe">Zimbabwe </option>
                                 </select>
                                 <div className="errorMsg">{this.state.errors.State}</div>
-
-                                <input className="valModif" type="submit" value="VALIDER LES MODIFICATIONS" />
+                                <Button type="submit" variant="outlined" color="primary" className="valModif">VALIDER LES MODIFICATIONS</Button>
 
                             </div>
                             </div>

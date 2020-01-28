@@ -4,6 +4,9 @@ import NavWine from './NavWine'
 import './Home.css'
 import SlideHome from './Slide-home';
 import API from '../../utils/API'
+import Button from '@material-ui/core/Button';
+import { Link } from "react-router-dom"
+
 
 
 class Home extends Component {
@@ -30,9 +33,16 @@ class Home extends Component {
         var products = this.state.products;
 
         if (products.length > 0) {
-            for (let index = 0; index < 8; index++) {
+            for (let index = 0; index < 9; index++) {
                 var random_nbr = Math.floor(Math.random() * products.length);
-                elem.push(<div className="col-md-2" style={{ border: "black solid 2px", padding: "10%", margin: "auto", marginBottom: "10px" }}><img alt={products[random_nbr].title} src={products[random_nbr].picture} /></div>);
+                elem.push(<div className="col-md-3 produit-home">
+                    <img className="img-wine" alt={products[random_nbr].title} src={products[random_nbr].picture} />
+                    <Button variant="outlined" color="secondary" >
+                        <Link to={"../produit/"} className="nav-link">
+                            Voir plus
+           </Link>
+                    </Button>
+                </div>);
                 // console.log(elem)
             }
 
@@ -44,18 +54,23 @@ class Home extends Component {
     }
 
     render() {
+ 
+
         return (
             <div>
                 <NavWine />
                 <SlideHome />
                 <Banner />
                 <div className="container">
-                    <div className="row" style={{ marginTop: "5%" }}>
+                    <div className="row row-produits" style={{ marginTop: "5%" }}>
                         {this.displayCard()}
                     </div>
                 </div>
+
+
+                <div className="container">
                 <div className="row">
-                    <div className="col-md-12" style={{ textAlign: "center", backgroundColor: "grey" }}>
+                    <div className="col-md-12 qsm">
                         <h1>Qui Sommes nous ? </h1>
                         <p>Fondé par cinq amis, l'entreprise Pinwar est née alors qu'Alexandre, Elise, Morgane, Alexandre et Marion était encore en études. Ils partagaient cette
                             passion du vin et décidèrent de réaliser ce rêve<br /> un peu fou qu'est d'ouvrir leur propre e-cave à vin.
@@ -71,6 +86,7 @@ class Home extends Component {
                         </p>
                     </div>
                 </div>
+            </div>
             </div>
         )
     }

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Button, Accordion, Card, Form, } from 'react-bootstrap'
+import { Accordion, Card, Form, } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import "react-input-range/lib/css/index.css"
 import RangeSlider from './Filters/price'
 import Rating from '@material-ui/lab/Rating';
+import Button from '@material-ui/core/Button';
 
 class FilterWine extends Component {
 
@@ -13,15 +14,20 @@ class FilterWine extends Component {
       value: [],
       region: [],
       alliance: [],
+      rating: 0
     };
   }
 
-  updateValue = (value) => {
-    this.state.value = value;
+  updateValue(value) {
+    this.props.priceUpdate(value);
   }
-  
-  up(props){
-    props.priceUpdate(this.state.value)
+
+  updateRating(rating){
+    this.props.ratingReload(rating)
+  }
+
+  updateRegion(region){
+    this.props.regionReload(region)
   }
 
   handleChangeRegion = (e) => {
@@ -47,9 +53,8 @@ class FilterWine extends Component {
                 <div>
                   <select>
                     <option>Trier par</option>
-                    <option value="Prix decroissanr">Prix decroissant</option>
-                    <option value="Prix croissant">Prix croissant</option>
-                    <option value="Nouveautés">Nouveautés</option>
+                    <option value="Prix croissant" onClick={this.props.orderAsc}>Prix croissant</option>
+                    <option value="Prix decroissant" onClick={this.props.orderDesc}>Prix decroissant</option>
                   </select>
                 </div>
               </Card.Body>
@@ -69,6 +74,9 @@ class FilterWine extends Component {
               <Form method="get">
                 <div>
                 <RangeSlider updateValue={this.updateValue.bind(this)}/>
+                <Button variant="outlined" color="secondary" onClick={this.props.reloadDisplay}>
+        Valider
+      </Button>
                 </div>
               </Form>
             </Card.Body>
@@ -152,92 +160,26 @@ class FilterWine extends Component {
           <Accordion.Collapse eventKey="3">
             <Card.Body>
               <ul className="Filter-nav">
-
-                <li style={{ listStyle: "none" }}>
-                  <Form action="#" method="get">
-                    <div>
-                      <label>
-                        <span className="ns-FilterProduct-iconContent">Alsace</span>
-                        <input
-                          name='region'
-                          type="hidden"
-                          value={this.state.region}
-                          onClick={e => this.handleChangeRegion(e)} />
-                      </label>
-                    </div>
-                  </Form>
+              <li style={{ listStyle: "none" }}>
+                <p><Link onClick={this.props.reloadDisplay}> Toute les régions</Link></p>
                 </li>
                 <li style={{ listStyle: "none" }}>
-                  <Form action="#" method="get">
-                    <label>
-                      <span className="ns-FilterProduct-iconContent"> Beaujolais-Mâconnais</span>
-                      <input
-                        name='region'
-                        type="hidden"
-                        value={this.state.region}
-                        onClick={e => this.handleChangeRegion(e)} />
-                    </label>
-                  </Form>
+                <p><Link onClick={(e) => this.updateRegion("Languedoc-Roussillon",e)}> Languedoc-Roussillon</Link></p>
                 </li>
                 <li style={{ listStyle: "none" }}>
-                  <Form action="#" method="get">
-                    <label>
-                      <span className="ns-FilterProduct-iconContent">Bordeaux</span>
-                      <input
-                        name='region'
-                        type="hidden"
-                        value={this.state.region}
-                        onClick={e => this.handleChangeRegion(e)} />
-                    </label>
-                  </Form>
-                </li>
-                <li  style={{ listStyle: "none" }}>
-                  <Form action="#" method="get">
-                    <label>
-                      <span className="ns-FilterProduct-iconContent">Bourgogne</span>
-                      <input
-                        name='region'
-                        type="hidden"
-                        value={this.state.region}
-                        onClick={e => this.handleChangeRegion(e)} />
-                    </label>
-                  </Form>
+                <p><Link onClick={(e) => this.updateRegion("Sud-Ouest",e)}> Sud-Ouest</Link></p>
                 </li>
                 <li style={{ listStyle: "none" }}>
-                  <Form action="#" method="get">
-                    <label>
-                      <span className="ns-FilterProduct-iconContent">Champagne</span>
-                      <input
-                        name='region'
-                        type="hidden"
-                        value={this.state.region}
-                        onClick={e => this.handleChangeRegion(e)} />
-                    </label>
-                  </Form>
+                <p><Link onClick={(e) => this.updateRegion("Bordeaux",e)}> Bordeaux</Link></p>
                 </li>
                 <li style={{ listStyle: "none" }}>
-                  <Form action="#" method="get">
-                    <label>
-                      <span className="ns-FilterProduct-iconContent">Italie</span>
-                      <input
-                        name='region'
-                        type="hidden"
-                        value={this.state.region}
-                        onClick={e => this.handleChangeRegion(e)} />
-                    </label>
-                  </Form>
+                <p><Link onClick={(e) => this.updateRegion("Rhône",e)}> Rhône</Link></p>
                 </li>
                 <li style={{ listStyle: "none" }}>
-                  <Form action="#" method="get">
-                    <label>
-                      <span className="ns-FilterProduct-iconContent">Rhône</span>
-                      <input
-                        name='region'
-                        type="hidden"
-                        value={this.state.region}
-                        onClick={e => this.handleChangeRegion(e)} />
-                    </label>
-                  </Form>
+                <p><Link onClick={(e) => this.updateRegion("Italie",e)}> Italie</Link></p>
+                </li>
+                <li style={{ listStyle: "none" }}>
+                <p><Link onClick={(e) => this.updateRegion("Espagne",e)}> Espagne</Link></p>
                 </li>
               </ul>
             </Card.Body>
@@ -256,16 +198,14 @@ class FilterWine extends Component {
             <Card.Body>
               <ul className="Filter-nav">
                 <li style={{ listStyle: "none" }}>
-                  <Form action="#" method="get">
                   <div>
-                  <p><Rating name="read-only" value={5} readOnly size="small" /> 5 étoiles</p>
-                  <p><Rating name="read-only" value={4} readOnly size="small" /> 4 étoiles</p>
-                  <p><Rating name="read-only" value={3} readOnly size="small" /> 3 étoiles</p>
-                  <p><Rating name="read-only" value={2} readOnly size="small" /> 2 étoiles</p>
-                  <p><Rating name="read-only" value={1} readOnly size="small" /> 1 étoile</p>
-                  <p><Rating name="read-only" value={0} readOnly size="small" /> Pas d'avis</p>
+                  <p><Link onClick={(e) => this.updateRating(5,e)}><Rating name="read-only" value={5} readOnly size="small" /> 5 étoiles</Link></p>
+                  <p><Link onClick={(e) => this.updateRating(4,e)}><Rating name="read-only" value={4} readOnly size="small" /> 4 étoiles</Link></p>
+                  <p><Link onClick={(e) => this.updateRating(3,e)}><Rating name="read-only" value={3} readOnly size="small" /> 3 étoiles</Link></p>
+                  <p><Link onClick={(e) => this.updateRating(2,e)}><Rating name="read-only" value={2} readOnly size="small" /> 2 étoiles</Link></p>
+                  <p><Link onClick={(e) => this.updateRating(1,e)}><Rating name="read-only" value={1} readOnly size="small" /> 1 étoile</Link></p>
+                  <p><Link onClick={(e) => this.updateRating(0,e)}><Rating name="read-only" value={0} readOnly size="small" /> Pas d'avis</Link></p>
                   </div>
-                  </Form>
                 </li>
               </ul>
             </Card.Body>

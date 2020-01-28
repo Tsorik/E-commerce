@@ -27,6 +27,7 @@ class HomeController extends AbstractController
                                     'title' => $product->getTitle(),
                                     'description' =>$product->getDescription(),
                                     'picture' => $product->getPicture(),
+                                    'price' => $product->getPrice(),
                                      );
          }
        

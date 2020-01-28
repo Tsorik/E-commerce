@@ -22,6 +22,7 @@ import SavAdmin from './components/admin/SavAdmin';
 import FicheInscritsAdmin from './components/admin/FicheProfilAdmin';
 import FinalCommande from './components/panier/FinalCommande'
 import SavMessageAdmin from './components/admin/SavMessageAdmin';
+import "./App.css"
 
 // import Cart from './components/home/Cart'
 
@@ -56,7 +57,7 @@ handleChangeCart() {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/categorie/:id" component={Categorie} />
+              <Route exact path="/categorie/:id" render={(props) => <Categorie {...props} handleChangeCart={this.handleChangeCart} />} />
               <Route exact path="/produit/:id" render={(props) => <Produit {...props} handleChangeCart={this.handleChangeCart} />} />
               <Route exact path="/panier" render={(props) => <Panier {...props} handleChangeCart={this.handleChangeCart} />} />
               <Route exact path="/profile" component={Profile} />

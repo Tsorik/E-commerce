@@ -22,6 +22,8 @@ class ProductController extends AbstractController
                                         'title' => $product->getTitle(),
                                         'description' => $product->getDescription(),
                                         'desclong' => $product->getDesclong(),
+                                        'region' => $product->getRegion(),
+                                        'annee' => $product->getAnnee(),
                                         'picture' => $product->getPicture(),
                                         'note' => $product->getScore(),
                                         'price' => $product->getPrice(),

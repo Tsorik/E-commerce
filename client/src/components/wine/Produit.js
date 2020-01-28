@@ -5,6 +5,7 @@ import API from '../../utils/API'
 import { Image } from "semantic-ui-react"
 import './produit.css'
 import Rating from '@material-ui/lab/Rating';
+import Button from '@material-ui/core/Button';
 
 
 
@@ -27,6 +28,7 @@ class Produit extends Component {
 
     componentDidMount() {
         const id = this.props.match.params.id
+        this.updateLink(id)
         API.getProduct(id).then((res) => {
             this.setState({ produits: res.data })
 
@@ -65,14 +67,14 @@ class Produit extends Component {
     initialState = { value: '' }
 
     state = this.initialState
-  
+
     handleFormReset = () => {
-      this.setState(() => this.initialState)
+        this.setState(() => this.initialState)
     }
 
     handleChange(event) {
         this.setState({ value: event.target.value });
-       
+
     }
 
     inputValueChange(event) {
@@ -81,7 +83,7 @@ class Produit extends Component {
 
     handleSubmitComment(event) {
         event.preventDefault();
-       
+
         const id = parseInt(this.props.match.params.id)
 
         const user = JSON.parse(localStorage.getItem('usertoken'));
@@ -91,7 +93,16 @@ class Produit extends Component {
                 this.setState({ comments: res.data })
             }).catch(err => console.log('erreur reat', err))
         }).catch(err => console.log('erreur post comment', err))
- event.target.reset();
+        event.target.reset();
+    }
+
+    updateLink(id) {
+        API.getProduct(id).then((res) => {
+            this.setState({ produits: res.data }, () => { this.render() })
+
+        }).catch(err => {
+            console.log("error test", err)
+        })
     }
 
     render() {
@@ -127,34 +138,34 @@ class Produit extends Component {
                                         })}
                                     </div>
 
-                                    <div className="col-md-6" style={{ color: "#A61717" }}>
+                                    <div className="col-md-6 price">
                                         {produitsInfo.map(produit => {
                                             return (
-                                                <h2 id="prix" style={{}}>{produit.price} €</h2>
+                                                <h2 id="prix">{produit.price} €</h2>
                                             );
                                         })}
                                     </div>
 
                                     <div className="col-md-6" style={{ textAlign: "center" }}>
-                                        <a href="#avis">Voir les avis</a>
+                                        <a className="voiravis" href="#avis">Voir les avis</a>
 
                                     </div>
 
                                     <div className="col-md-6">
-                                        <div className="row">
-                                            <form onSubmit={this.submitCartForm} style={{ textAlign: "center" }}>
-                                                <div className="col-md-2">
+                                        <form id="panier" onSubmit={this.submitCartForm}>
+                                            <div className="row">
+                                                <div className="col-md-3">
 
-                                                    <input type="number" id="quantite" name="quantite" min="1" max="12" width="20px" value={this.state.valueinputnumber} onChange={this.inputValueChange} style={{ padding: "15px" }} />
-
-                                                </div>
-                                                <div className="col-md-10">
-
-                                                    <input type="submit" id="btn-panier" value="AJOUTER AU PANIER" title="Ajouter au panier" style={{ backgroundColor: "#A61717", padding: "15px" }} />
+                                                    <input type="number" id="quantite" name="quantite" min="1" max="12" width="20px" value={this.state.valueinputnumber} onChange={this.inputValueChange} />
 
                                                 </div>
-                                            </form>
-                                        </div>
+                                                <div className="col-md-9 ajoutpanier">
+
+                                                    <Button type="submit" size="small" variant="outlined" color="primary" id="btn-panier">AJOUTER AU PANIER</Button>
+
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
 
                                     <div className="col-md-12" style={{ padding: "7%" }}>
@@ -162,6 +173,11 @@ class Produit extends Component {
                                         {produitsInfo.map(produit => {
                                             return (
                                                 <p>{produit.desclong}</p>
+                                            );
+                                        })}
+                                        {produitsInfo.map(produit => {
+                                            return (
+                                                <p style={{ textAlign: "center", padding: "7%" }}><u>Mis en bouteille en :</u>  {produit.annee}</p>
                                             );
                                         })}
                                     </div>
@@ -176,22 +192,22 @@ class Produit extends Component {
                                 {produitsInfo.map(produit => {
                                     return (
                                         <Fragment>
-                                    <p>Notes : {produit.note}/5</p>  <Rating name="read-only" value={produit.note} precision={0.5} size="large" readOnly/>
-                                    </Fragment>
+                                            <p>Notes : {produit.note}/5</p>  <Rating name="read-only" value={produit.note} precision={0.5} size="large" readOnly />
+                                        </Fragment>
                                     );
                                 })}
                             </div>
                         </div>
 
                         <div className="col-md-6" style={{ textAlign: "center" }}>
-                            <a href="https://www.marmiton.org/" style={{ textAlign: "center" }}>Idées recettes</a>
+                            <a className="voiravis" href="https://www.marmiton.org/" style={{ textAlign: "center" }}>Idées recettes</a>
                         </div>
                     </div>
                 </div>
 
-                <div className="container aviscontainer" id="avis" style={{ backgroundColor: "grey", marginBottom: "3%" }}>
+                <div className="container aviscontainer" id="avis">
 
-                    <div className="row">
+                    <div className="row avistitre">
                         <div>
                             <h3>Avis</h3>
                         </div>
@@ -201,7 +217,7 @@ class Produit extends Component {
                         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                         return (
                             <Fragment>
-                                
+
                                 {/* BOX COMMENTAIRES  */}
                                 <div className="comments-container">
                                     <ul id="comments-list" className="comments-list">
@@ -235,11 +251,11 @@ class Produit extends Component {
 
                             <textarea placeholder="Votre commentaire ici…" value={this.state.value} onChange={this.handleChange} />
                         </label>
-                        <input type="submit" value="Envoyer" />
+                        <input type="submit" value="Envoyer" id="envoyer" />
                     </form>
                 </div>
                 <div className="container">
-                    <Slide />
+                    <Slide updateLink={this.updateLink.bind(this)} />
                 </div>
 
             </div>

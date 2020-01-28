@@ -4,6 +4,8 @@ import NavWine from '../home/NavWine'
 import './profile.css'
 import { Link } from "react-router-dom"
 import API from "../../utils/API";
+import Button from '@material-ui/core/Button';
+
 
 
 export default class Profile extends React.Component {
@@ -32,7 +34,7 @@ export default class Profile extends React.Component {
                 <div className="container">
                     <div className="row">
                         <div id="bienvenue">
-                            {info.map(function(user, i) {
+                            {info.map(function (user, i) {
                                 return (
                                     <Fragment key={i}>
                                         <h3 >Bienvenue {user.prenom}</h3>
@@ -45,21 +47,21 @@ export default class Profile extends React.Component {
 
                     <div className="row">
                         <ul className="navProfile">
-                            <li className="detailsnav"><Link to="/profile">MES INFORMATIONS PERSONNELLES</Link></li>
-                            <li className="detailsnav"><Link to="/profile">HISTORIQUE D'ACHATS</Link></li>
+                            <li><Link to="/profile" className="detailsnav">MES INFORMATIONS PERSONNELLES</Link></li>
+                            <li><Link to="/profile" className="detailsnav">HISTORIQUE D'ACHATS</Link></li>
                         </ul>
                     </div>
                 </div>
 
                 <div className="container infoPerso">
                     <div className="row">
-                        <h5>MES INFORMATIONS PERSONNELLES</h5>
+                        <h5 className="titre">MES INFORMATIONS PERSONNELLES</h5>
                     </div>
                     <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-6 infofofo">
                             {info.map(user => {
                                 return (
-                                    <p>Nom Prénom :<i>{user.nom} {user.prenom}</i></p>
+                                    <p><i>{user.nom} {user.prenom}</i></p>
                                 );
                             })
                             }
@@ -68,20 +70,20 @@ export default class Profile extends React.Component {
                                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                                 return (
 
-                                    <p>Date de naissance : {event.toLocaleString('fr-FR', options)}</p>
+                                    <p>{event.toLocaleString('fr-FR', options)}</p>
                                 );
                             })
                             }
                             {info.map(user => {
                                 return (
-                                    <p>Téléphone : <i>0{user.tel}</i></p>
+                                    <p><i class="fas fa-phone-alt"></i> <i>0{user.tel}</i></p>
                                 );
                             })
                             }
                             {info.map(user => {
 
                                 return (
-                                    <p>E-Mail : <u><i>{user.email.toString()}</i></u></p>
+                                    <p><u><i>{user.email.toString()}</i></u></p>
                                 );
                             })
                             }
@@ -116,8 +118,8 @@ export default class Profile extends React.Component {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-6">
-                            <Link to="/profile/modif">Modifier mes informations pesonnelles</Link>
+                        <div className="col-md-6 modifinfoperso">
+                            <Link to="/profile/modif" style={{ color: "#73150D" }}>Modifier mes informations pesonnelles</Link>
                         </div>
 
                     </div>
@@ -125,7 +127,7 @@ export default class Profile extends React.Component {
 
                 <div className="container histAchats">
                     <div className="row">
-                        <h5>HISTORIQUE D'ACHATS</h5>
+                        <h5 className="titre">HISTORIQUE D'ACHATS</h5>
                     </div>
                     <div className="row">
                         <div className="col-md-6">
@@ -137,8 +139,7 @@ export default class Profile extends React.Component {
                     </div>
                     <div className="row">
                         <form className="btn-contact">
-                            <input type="submit" id="btn-cont" value="CONTACTEZ NOUS PAR MAIL" title="contact" />
-
+                            <Button type="submit" variant="outlined" color="primary" className="contactmail">CONTACTEZ NOUS PAR MAIL</Button>
                         </form>
                     </div>
                 </div>

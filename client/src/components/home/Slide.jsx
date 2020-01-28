@@ -5,7 +5,7 @@ import { Image } from "semantic-ui-react";
 import "bootswatch/dist/journal/bootstrap.min.css"
 import API from "../../utils/API"
 import { Button } from "react-bootstrap"
-
+import { Link, withRouter } from 'react-router-dom'
 import "./Slide.css"
 
 
@@ -29,6 +29,12 @@ class Slide extends Component {
       console.log("error test", err)
     })
   }
+  handleClick(id) {
+    this.props.history.push("../produit/" + id)
+    if (this.props.updateLink) {
+        this.props.updateLink(id)
+    }
+}
 
   render() {
     const images = this.state.image;
@@ -69,11 +75,13 @@ class Slide extends Component {
                 src={image.picture}
               />
               <figcaption id="desc" className="desc">
-              <p>{image.description}</p>
-              <Button href={`/produit/${image.id}`}>
-               En voir plus
-              </Button>
-             </figcaption>
+                <p>{image.description}</p>
+                <Button variant="outlined" color="secondary" >
+                  <Link to={"../produit/" + image.id} className="nav-link" onClick={() => this.handleClick(image.id)}>
+                    En voir plus
+                  </Link>
+                </Button>
+              </figcaption>
             </figure>
           );
         })}
@@ -83,5 +91,5 @@ class Slide extends Component {
 }
 
 
-export default Slide;
+export default withRouter(Slide);
 

@@ -34,6 +34,16 @@ class Products
     private $Description;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Region;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $Annee;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $Score;
@@ -106,6 +116,30 @@ class Products
     public function setDescription(?string $Description): self
     {
         $this->Description = $Description;
+
+        return $this;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->Region;
+    }
+
+    public function setRegion(?string $Region): self
+    {
+        $this->Region = $Region;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->Annee;
+    }
+
+    public function setAnnee(int $Annee): self
+    {
+        $this->Annee = $Annee;
 
         return $this;
     }

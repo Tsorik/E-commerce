@@ -1,183 +1,157 @@
 import React, { Component } from 'react';
 import "./FinalCommande.css";
-import { ButtonGroup, Button } from 'react-bootstrap'
+import { ButtonGroup } from 'react-bootstrap'
 import ToggleButton from 'react-bootstrap/ToggleButton'
 import { Link } from 'react-router-dom'
+import API from '../../utils/API'
+import HorizontalLabelPositionBelowStepper from './Slidestepper';
+import Button from '@material-ui/core/Button';
+import MainScreen from './screens/MainScreen';
 
 
 export default class FinalCommande extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            produits: [],
+            nbr_product: [],
+            cart: {},
+            total: 0,
+        };
+        this.totalCart = this.totalCart.bind(this);
+        
+    }
+
+    componentDidMount() {
+        var array_cart;
+        var id_product = [];
+        var nbr_product = [];
+        var cart = JSON.parse(localStorage.getItem("cart_id"))
+        this.setState({ cart: cart });
+        array_cart = Object.entries(cart);
+        array_cart.forEach(element => {
+            id_product.push(element[0]);
+            nbr_product.push(element[1]);
+        });
+        API.getCart(id_product).then((res) => {
+            this.setState({ produits: res.data })
+            this.setState({ nbr_product: nbr_product })
+            this.totalCart()
+        }).catch(err => {
+            console.log("error cart", err)
+        })
+    }
+
+    totalCart() {
+        var produits = this.state.produits;
+        var total = 0;
+        var nbr_product = this.state.nbr_product;
+        produits.map((produit, index) => {
+            return (
+                total += produit.price * nbr_product[index]
+            )
+        })
+        this.setState({ total: total })
+    }
+
+    infoCommande(){
+        const produits = this.state.produits;
+        const nbr_product = this.state.nbr_product;
+        return(
+            <div className="payement container">
+            <div className="row">
+                <div className="recap-delivery bg-light col-md-8">
+                    <h2>Revue des commandes</h2>
+                    <table className="table col-md-4">
+                        <tbody>
+                            {produits.map((produit, index) => {
+                                return (
+                                    <tr>
+                                        <td>{produit.title}</td>
+                                        <td>{nbr_product[index]}</td>
+                                        <td><img alt="pif" className="pif" src={produit.picture}></img></td>
+                                        <td>{produit.price}€</td>
+                                    </tr>
+                                );
+                            })}
+                            <tr>
+                                {this.state.total}€
+                            </tr>
+                        </tbody>
+                    </table>
+                    <label>Code promo :</label>
+                        <div className="promo-code">
+                            <input type="text" name="promo" />
+                            <Button variant="outlined" color="primary" className="validation" href="/">Valider</Button>
+                        </div>
+                        <p>Total :</p>
+                        <div className="order-now row col-md-12">
+                            <p>En cliquant sur "Suivant", je confirme avoir lu et accepté les termes et conditions.</p>
+                        </div>
+                </div>
+            </div>
+        </div>
+        )
+    }
+
+    adresseCommande(){
+        return(
+            <div className="delivery container">
+            <div className="row">
+                <div className="infos bg-light col-md-8">
+                    <h2>Informations sur la livraison</h2>
+                    <div className="delivery-buttons">
+                        <ButtonGroup toggle className="buttons">
+                            <ToggleButton type="radio" name="radio" defaultChecked value="1">
+                                A domicile
+                        </ToggleButton>
+                            <ToggleButton type="radio" name="radio" defaultChecked value="2">
+                                En point relais
+                        </ToggleButton>
+                        </ButtonGroup>
+                    </div>
+                    <div className="adress container">
+                        <tr>
+                            <td>Mr Fromage</td>
+                        </tr>
+                        <tr>
+                            <td>Rue du fromage qui tâche</td>
+                        </tr>
+                        <tr>
+                            <td>Roquefort City</td>
+                        </tr>
+                    </div>
+                    <div className="add-adress row">
+                        <Link class="add" type="button" role="button">
+                            <p>Ajout nouvelles adresses</p>
+                        </Link>
+                        <Link class="selection" type="button" role="button">
+                            <p>Sélection autres adresses</p>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </div>
+        )
+    }
+
+    paiementCommande(){
+        return(
+            <MainScreen/>
+        
+        )
+    }
+
     render() {
         return (
             <React.Fragment>
-                <div className="delivery container">
-                    <div className="row">
-                        <div className="infos bg-light col-md-8">
-                            <h2>Informations sur la livraison</h2>
-                            <div className="delivery-buttons">
-                                <ButtonGroup toggle className="buttons">
-                                    <ToggleButton type="radio" name="radio" defaultChecked value="1">
-                                        A domicile
-                                </ToggleButton>
-                                    <ToggleButton type="radio" name="radio" defaultChecked value="2">
-                                        En point relais
-                                </ToggleButton>
-                                </ButtonGroup>
-                            </div>
-                            <div className="adress container">
-                                <tr>
-                                    <td>Mr Fromage</td>
-                                </tr>
-                                <tr>
-                                    <td>Rue du fromage qui tâche</td>
-                                </tr>
-                                <tr>
-                                    <td>Roquefort City</td>
-                                </tr>
-                            </div>
-                            <div className="add-adress row">
-                                <Link class="add" type="button" role="button">
-                                    <p>Ajout nouvelles adresses</p>
-                                </Link>
-                                <Link class="selection" type="button" role="button">
-                                    <p>Sélection autres adresses</p>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="order bg-light col-md-4">
-                            <h2>Récapitulatif de la commande</h2>
-                            <label>Code promo :</label>
-                            <div className="promo-code">
-                                <input type="text" name="promo" />
-                                <Button href="/" variant="outline-success">Valider</Button>
-                            </div>
-                            {/* message erreur si code promo faux */}
-                            <p>Total :</p>
-                            <div className="order-now row">
-                                <Button href="/" variant="success" size="lg" block>
-                                    Commander
-                                </Button>
-                                <p>En cliquant sur "Commander", je confirme avoir lu et accepté les termes et conditions.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="payement container">
-                    <div className="row">
-                        <div className="methods-payement bg-light col-md-8">
-                            <h2>Méthodes de paiement</h2>
-                            <div className="cb container">
-                                <p>******* Visa machin muche *******</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="payement container">
-                    <div className="row">
-                        <div className="recap-delivery bg-light col-md-8">
-                            <h2>Revue des commandes</h2>
-                            <table className="table col-md-4">
-                                <tbody>
-                                    <tr>
-                                        <td>Nom du produit</td>
-                                        <td><img className="wine" src="https://www.vinatis.com/33489-thickbox_default/lirac-2016-xavier-vignon.png"></img></td>
-                                        <td>Prix</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Nom du produit</td>
-                                        <td><img className="wine" src="https://www.vinatis.com/40931-detail_default/magnum-la-croix-de-carbonnieux-2016-second-vin-du-chateau-carbonnieux.png"></img></td>
-                                        <td>Prix</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Nom du produit</td>
-                                        <td><img className="wine" src="https://www.vinatis.com/37763-detail_default/demi-bouteille-chateau-guiraud-2010-1er-cru-classe.png"></img></td>
-                                        <td>Prix</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+               <HorizontalLabelPositionBelowStepper 
+               infoCommande = {this.infoCommande.bind(this)}
+               adresseCommande = {this.adresseCommande.bind(this)}
+               paiementCommande = {this.paiementCommande.bind(this)}
+               />
             </React.Fragment>
         );
     }
 }
-
-
-
-// import React, { Component } from 'react';
-// import "./FinalCommande.css";
-// import API from '../../utils/API'
-// import { Button, ButtonToolbar } from 'react-bootstrap'
-
-
-// export default class FinalCommande extends React.Component {
-
-
-//     render() {
-//         return (
-//             <React.Fragment>
-//                 <div className="livraison container">
-//                     <div className="row">
-//                         <div className="livraison bg-light col-md-8">
-//                             <h2>Informations sur la livraison</h2>
-//                             <ButtonToolbar>
-//                                 <Button variant="outline-danger">Livraison à domicile</Button>
-//                                 <Button variant="outline-danger">En point relais</Button>
-//                                 <div className="adresse container">
-//                                     <p>Mr Fromage</p>
-//                                     <p>Rue du fromage qui tâche</p>
-//                                     <p>Roquefort City</p>
-//                                 </div>
-//                             </ButtonToolbar>
-//                             <div className="ajout-adresse container">
-//                                 <div className="row">
-//                                     <p>Ajout nouvelles adresses</p>
-//                                     <p>Sélection autres adresses</p>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div className="recap container">
-//                         <div className="bg-light col-md-4">
-//                             <h2>Récapitulatif de la commande</h2>
-//                             <label>Code promo :</label>
-//                             <input type="text" name="promo" />
-//                             <Button variant="success">Valider</Button>
-//                             {/* message erreur si code promo faux */}
-//                             <p>Total :</p>
-//                             <Button href="success">Commander</Button>
-//                         </div>
-//                     </div>
-//                 </div>
-//                 <div className="paiement container">
-//                     <div className="row">
-//                         <div className="bg-light col-md-8">
-//                             <h2>Méthodes de paiement</h2>
-//                             <div className="cb container">
-//                                 <p>******* Visa machin muche *******</p>
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </div>
-//                 <div className="paiement container">
-//                     <div className="row">
-//                         <div className="bg-light col-md-12">
-//                             <h2>Revue des commandes</h2>
-//                             <table className="table col-md-12">
-//                                 <tbody>
-//                                     <tr>
-//                                         <td>1er produit</td>
-//                                         <td>2ème produit</td>
-//                                         <td>3ème produit</td>
-//                                     </tr>
-//                                 </tbody>
-//                             </table>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </React.Fragment>
-//         );
-//     }
-
-
-// }
